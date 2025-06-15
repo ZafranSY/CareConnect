@@ -1,8 +1,9 @@
 <template>
-  <canvas ref="chartCanvas"></canvas>
+  <Line :data="chartData" :options="chartOptions" />
 </template>
 
 <script>
+import { Line } from 'vue-chartjs'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,10 +12,8 @@ import {
   LineElement,
   Title,
   Tooltip,
-  Legend,
-  Filler
+  Legend
 } from 'chart.js'
-import { Line } from 'vue-chartjs'
 
 ChartJS.register(
   CategoryScale,
@@ -23,33 +22,20 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend,
-  Filler
+  Legend
 )
 
 export default {
   name: 'LineChart',
-  extends: Line,
+  components: { Line },
   props: {
-    data: {
+    chartData: {
       type: Object,
       required: true
     },
-    options: {
+    chartOptions: {
       type: Object,
-      default: () => ({})
-    }
-  },
-  mounted() {
-    this.renderChart(this.data, this.options)
-  },
-  watch: {
-    data: {
-      deep: true,
-      handler() {
-        this.$data._chart.destroy()
-        this.renderChart(this.data, this.options)
-      }
+      default: () => {}
     }
   }
 }

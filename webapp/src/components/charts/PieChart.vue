@@ -1,41 +1,24 @@
 <template>
-  <canvas ref="chartCanvas"></canvas>
+  <Pie :data="chartData" :options="chartOptions" />
 </template>
 
 <script>
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend
-} from 'chart.js'
 import { Pie } from 'vue-chartjs'
+import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement } from 'chart.js'
 
-ChartJS.register(ArcElement, Tooltip, Legend)
+ChartJS.register(Title, Tooltip, Legend, ArcElement)
 
 export default {
   name: 'PieChart',
-  extends: Pie,
+  components: { Pie },
   props: {
-    data: {
+    chartData: {
       type: Object,
       required: true
     },
-    options: {
+    chartOptions: {
       type: Object,
-      default: () => ({})
-    }
-  },
-  mounted() {
-    this.renderChart(this.data, this.options)
-  },
-  watch: {
-    data: {
-      deep: true,
-      handler() {
-        this.$data._chart.destroy()
-        this.renderChart(this.data, this.options)
-      }
+      default: () => {}
     }
   }
 }

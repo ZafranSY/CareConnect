@@ -1,51 +1,32 @@
 <template>
-  <canvas ref="chartCanvas"></canvas>
+  <Bar :data="chartData" :options="chartOptions" />
 </template>
 
 <script>
+import { Bar } from 'vue-chartjs'
 import {
   Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale
 } from 'chart.js'
-import { Bar } from 'vue-chartjs'
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-)
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
 export default {
   name: 'BarChart',
-  extends: Bar,
+  components: { Bar },
   props: {
-    data: {
+    chartData: {
       type: Object,
       required: true
     },
-    options: {
+    chartOptions: {
       type: Object,
-      default: () => ({})
-    }
-  },
-  mounted() {
-    this.renderChart(this.data, this.options)
-  },
-  watch: {
-    data: {
-      deep: true,
-      handler() {
-        this.$data._chart.destroy()
-        this.renderChart(this.data, this.options)
-      }
+      default: () => {}
     }
   }
 }
