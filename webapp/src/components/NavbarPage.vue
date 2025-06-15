@@ -39,7 +39,7 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  name: 'Navbar',
+  name: 'NavbarPage',
   computed: {
     ...mapGetters(['isAuthenticated', 'currentUser'])
   },
