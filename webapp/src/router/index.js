@@ -3,8 +3,8 @@ import Home from "../views/HomePage.vue"
 import Dashboard from "../views/DashboardPage.vue"
 import Articles from "../views/ArticlesPage.vue"
 import Feedback from "../views/FeedbackPage.vue"
-import Login from "../views/Login.vue"
-import Register from "../views/Register.vue"
+// import Login from "../views/Login.vue"
+// import Register from "../views/Register.vue"
 
 const routes = [
   {
@@ -16,7 +16,7 @@ const routes = [
     path: "/dashboard",
     name: "Dashboard",
     component: Dashboard,
-    meta: { requiresAuth: true },
+    // meta: { requiresAuth: true },
   },
   {
     path: "/articles",
@@ -28,16 +28,16 @@ const routes = [
     name: "Feedback",
     component: Feedback,
   },
-  {
-    path: "/login",
-    name: "Login",
-    component: Login,
-  },
-  {
-    path: "/register",
-    name: "Register",
-    component: Register,
-  },
+  // {
+  //   path: "/login",
+  //   name: "Login",
+  //   component: Login,
+  // },
+  // {
+  //   path: "/register",
+  //   name: "Register",
+  //   component: Register,
+  // },
 ]
 
 const router = createRouter({
