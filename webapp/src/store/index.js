@@ -1,4 +1,9 @@
 import { createStore } from "vuex"
+// Import Firestore instance and necessary functions
+import { db } from "../firebaseConfig" // Adjust path if your firebaseConfig.js is elsewhere
+import { collection, addDoc, serverTimestamp } from "firebase/firestore"
+
+// Keep your existing dummy data imports
 import { getDashboardStats, articles, authenticateUser, createUser, addFeedback } from "../data/DummyData"
 
 export default createStore({
@@ -144,6 +149,33 @@ export default createStore({
       }
     },
 
+    // Renamed from 'submitFeedback' to 'submitFeeling' to match the new page purpose
+    // This action now interacts with Firestore
+    async submitFeeling({ commit }, feelingData) {
+      commit("SET_LOADING", true)
+      commit("SET_ERROR", null)
+      try {
+        // Add a new document to the 'sharefeeling' collection in Firestore
+        await addDoc(collection(db, "sharefeeling"), {
+          message: feelingData.message,
+          timestamp: serverTimestamp(), // Use Firestore's server timestamp
+          // You could add userId here if the user is authenticated and you want to link it
+          // userId: this.getters.currentUser ? this.getters.currentUser.id : null,
+        })
+        console.log("Feeling submitted to Firestore successfully!")
+        return { message: "Feeling submitted successfully" }
+      } catch (error) {
+        console.error("Error submitting feeling to Firestore:", error)
+        commit("SET_ERROR", error.message || "Failed to share your feeling.")
+        throw error // Re-throw the error so the component can catch it
+      } finally {
+        commit("SET_LOADING", false)
+      }
+    },
+
+    // Keep the original dummy addFeedback action if it's still used elsewhere,
+    // or remove it if 'submitFeeling' is its complete replacement.
+    // I've kept it for now, assuming you might have other feedback forms.
     async submitFeedback({ commit }, feedbackData) {
       try {
         commit("SET_LOADING", true)

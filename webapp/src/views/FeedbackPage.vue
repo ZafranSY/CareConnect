@@ -65,52 +65,59 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex';
+// The 'db' import is no longer needed here as Firestore operations are handled by the Vuex store action.
+// import { db } from '../firebaseConfig'; // This line is removed.
 
 export default {
   name: 'FeedbackPage', // Keeping the page name
   data() {
     return {
-      userFeeling: '', // Renamed from 'form.message' for clarity
-      submitted: false
-    }
+      userFeeling: '',
+      submitted: false,
+      // 'documents' state was related to the misplaced created() method; removing it.
+    };
   },
   computed: {
     ...mapState(['loading', 'error'])
   },
   methods: {
     ...mapActions({
-      submitFeelingAction: 'submitFeeling' // Map the action with a new local name if needed, or directly 'submitFeedback' if your store action is generic
+      submitFeelingAction: 'submitFeeling' // Maps Vuex action 'submitFeeling' to local method 'submitFeelingAction'
     }),
 
     async submitFeeling() {
+      // Prevent submission if the textarea is empty or only contains whitespace
       if (!this.userFeeling.trim()) {
-        // Prevent submission if the textarea is empty or only contains whitespace
         return;
       }
       try {
-        // You'll need to update your Vuex action 'submitFeedback' to accept just the message or adapt as needed.
-        // For now, let's assume it can handle a single string or an object with a 'message' key.
-        await this.submitFeelingAction({ message: this.userFeeling, type: 'emotional-expression' }); // Adding a 'type' for categorization on the backend
-        this.submitted = true;
-        this.userFeeling = ''; // Clear the textarea after successful submission
+        // Call the Vuex action to handle the Firestore submission
+        await this.submitFeelingAction({ message: this.userFeeling, type: 'emotional-expression' });
+        this.submitted = true; // Set submitted to true on success
+        this.userFeeling = ''; // Clear the textarea
 
         // Hide success message after 7 seconds, slightly longer for a calming effect
         setTimeout(() => {
           this.submitted = false;
         }, 7000);
       } catch (error) {
+        // The error state from Vuex will handle showing the error message.
+        // We log it here for debugging purposes.
         console.error('Error submitting feeling:', error);
-        // The error state from Vuex will handle showing the error message
       }
-    }
+    },
+    // The 'created()' lifecycle hook was misplaced inside 'methods'.
+    // It is removed from here as its logic is now handled by the Vuex store action.
+    // If you need to fetch data when the component loads, the 'created()' hook
+    // should be a direct property of the component's export object, not inside 'methods'.
   }
 }
 </script>
 
 <style scoped>
-/* Assuming your existing .card, .form-label, .form-input, .btn, .alert styles are defined elsewhere or globally */
-/* You might want to add specific styles if the 'card' or 'alert' classes are not already defined. */
+/* Your existing .card, .form-label, .form-input, .btn, .alert styles remain here. */
+/* Just ensure they are defined or properly imported if you're using separate CSS files */
 
 .card {
   background-color: #ffffff;
