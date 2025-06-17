@@ -17,7 +17,7 @@
           <router-link to="/" class="nav-link">Home</router-link>
           <router-link to="/dashboard" class="nav-link">Dashboard</router-link>
           <router-link to="/articles" class="nav-link">Articles</router-link>
-          <router-link to="/feedback" class="nav-link">Feedback</router-link>
+          <router-link to="/feedback" class="nav-link">Talk to Us</router-link>
         </div>
         
         <div class="flex items-center space-x-4">

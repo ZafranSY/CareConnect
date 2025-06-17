@@ -42,19 +42,19 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="bg-blue-50 p-6 rounded-lg text-center">
             <h3 class="text-lg font-semibold text-blue-800 mb-2">Today's Cases</h3>
-            <p class="text-3xl font-bold text-blue-600">{{ dashboardStats.todayCases || 0 }}</p>
+            <p class="text-3xl font-bold text-blue-600">{{ todayCases || 0 }}</p>
             <p class="text-sm text-blue-600 mt-1">Reported today</p>
           </div>
           
           <div class="bg-green-50 p-6 rounded-lg text-center">
             <h3 class="text-lg font-semibold text-green-800 mb-2">Total Cases</h3>
-            <p class="text-3xl font-bold text-green-600">{{ dashboardStats.totalCases || 0 }}</p>
+            <p class="text-3xl font-bold text-green-600">{{ totalCases || 0 }}</p>
             <p class="text-sm text-green-600 mt-1">All time</p>
           </div>
           
           <div class="bg-red-50 p-6 rounded-lg text-center">
             <h3 class="text-lg font-semibold text-red-800 mb-2">Critical Cases</h3>
-            <p class="text-3xl font-bold text-red-600">{{ dashboardStats.suicideCases || 0 }}</p>
+            <p class="text-3xl font-bold text-red-600">{{ suicideCases || 0 }}</p>
             <p class="text-sm text-red-600 mt-1">Suicide & Self-harm</p>
           </div>
         </div>
@@ -81,18 +81,46 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+// import { mapState, mapActions } from 'vuex'
+import axios from 'axios';  // Add this line
 
 export default {
   name: 'HomePage',
-  computed: {
-    ...mapState(['dashboardStats'])
+  data(){
+    return{
+      todayCases:0,
+      totalCases:0,
+      criticalCases:0,
+    }
   },
-  methods: {
-    ...mapActions(['fetchDashboardStats'])
+async created() {
+    try {
+      const response = await axios.get("http://localhost:3000/api/mental-health");
+      console.log(response.data);  // Log the full response
+
+      // Get the "value" from the response, which contains the indicators data
+      const indicators = response.data.value || [];
+
+      // Total number of indicators (total "cases" for all time)
+      this.totalCases = indicators.length;
+
+      // Today's cases - if you want to filter based on today's date, but since this is about indicators, you can adjust this logic
+      const today = new Date().toISOString().split('T')[0]; // Today's date in YYYY-MM-DD format
+      this.todayCases = indicators.filter((indicator) => {
+        // Example: Assuming some fields like reportedDate exist for the indicator (but they don't in your case)
+        const caseDate = new Date(indicator.reportedDate).toISOString().split('T')[0];
+        return caseDate === today;
+      }).length;
+
+      // Critical cases - assuming these are related to "suicide" or "self-harm" indicators
+      this.criticalCases = indicators.filter(
+        (indicator) => indicator.IndicatorName.toLowerCase().includes("suicide") || indicator.IndicatorName.toLowerCase().includes("self-harm")
+      ).length;
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
   },
-  async mounted() {
-    await this.fetchDashboardStats()
-  }
+
 }
 </script>
