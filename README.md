@@ -1,6 +1,4 @@
-Here's a comprehensive `README.md` that compiles all the steps for deploying your `CareConnect` Vue.js + Express.js project to Firebase, specifically targeting the free Spark Plan. You can directly copy and paste this into a file named `README.md` at the root of your `CareConnect` project (`C:\Users\user\Documents\GitHub\CareConnect`).
 
------
 
 # CareConnect - Full-Stack Deployment Guide (Vue.js + Express.js on Firebase Free Tier)
 
