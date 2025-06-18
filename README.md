@@ -2,7 +2,7 @@
 
 # CareConnect - Full-Stack Deployment Guide (Vue.js + Express.js on Firebase Free Tier)
 
-https://careconnect-34acb.web.app/feedback
+https://careconnect-34acb.web.app
 
 This `README.md` provides a step-by-step guide to deploy the CareConnect project, consisting of a Vue.js frontend and an Express.js backend (running as Firebase Cloud Functions), entirely on Firebase's free "Spark" plan.
 
